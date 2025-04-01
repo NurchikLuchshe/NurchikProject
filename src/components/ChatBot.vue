@@ -74,9 +74,9 @@ export default {
       showQuickReplies: true,
       quickReplies: [
         'Привет!',
-        'Расскажи о себе',
-        'Покажи проекты',
-        'Как с тобой связаться?'
+        'Как дела?',
+        'Спасибо!',
+        'Пока!'
       ],
       botResponses: {
         'Привет!': 'Привет! Я Nurchik, веб-разработчик. Чем могу помочь?',
@@ -205,19 +205,6 @@ export default {
   box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
 }
 
-.chat-bot__badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #ff4757;
-  color: white;
-  font-size: 0.8rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 10px;
-  min-width: 20px;
-  text-align: center;
-}
-
 .chat-bot__window {
   position: fixed;
   bottom: 80px;
@@ -238,7 +225,7 @@ export default {
   z-index: 1000;
 }
 
-.chat-bot__window.active {
+.chat-bot--open .chat-bot__window {
   transform: translateY(0);
   opacity: 1;
   visibility: visible;
@@ -423,13 +410,22 @@ export default {
   }
 
   .chat-bot__window {
-    bottom: 0;
-    right: 0;
+    position: fixed;
+    top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
-    height: calc(100% - 4rem);
+    height: 100%;
     max-width: 100%;
-    border-radius: 20px 20px 0 0;
+    border-radius: 0;
+    transform: translateY(-100%);
+    z-index: 9999;
+    margin-top: 0;
+  }
+
+  .chat-bot--open .chat-bot__window {
+    transform: translateY(0);
   }
 }
 
@@ -447,13 +443,13 @@ export default {
   }
 
   .chat-bot__window {
-    height: calc(100% - 3.5rem);
+    margin-top: 0;
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 430px) {
   .chat-bot {
-    bottom: 0.6rem;
+  bottom: 0.9rem;        
     right: 0.6rem;
     left: 0.6rem;
   }
@@ -462,6 +458,12 @@ export default {
     width: 40px;
     height: 40px;
     font-size: 1.1rem;
+  }
+
+  .chat-bot__window {
+    height: 402px;
+    position: relative;
+    
   }
 }
 </style> 

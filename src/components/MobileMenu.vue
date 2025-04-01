@@ -1,58 +1,42 @@
 <template>
-  <div class="mobile-menu" :class="{ 'active': isOpen }">
+  <div class="mobile-menu" :class="{ 'is-open': isOpen }">
     <div class="mobile-menu__overlay" @click="$emit('close')"></div>
     <div class="mobile-menu__content">
       <div class="mobile-menu__header">
+        <router-link to="/" class="mobile-menu__logo" @click="$emit('close')">
+          NURCHIK
+        </router-link>
         <button class="mobile-menu__close" @click="$emit('close')">
-          <i class="fas fa-times"></i>
+          <i class="bx bx-x"></i>
         </button>
       </div>
 
-      <div class="mobile-menu__body">
-        <nav class="mobile-menu__nav">
-          <router-link 
-            v-for="link in navLinks" 
-            :key="link.path"
-            :to="link.path"
-            class="mobile-menu__link"
-            @click="$emit('close')"
-          >
-            {{ link.name }}
-          </router-link>
-        </nav>
+      <nav class="mobile-menu__nav">
+        <router-link to="/" class="mobile-menu__link" @click="$emit('close')">
+          Главная
+        </router-link>
+        <router-link to="/reviews" class="mobile-menu__link" @click="$emit('close')">
+          Отзывы
+        </router-link>
+        <router-link to="/portfolio" class="mobile-menu__link" @click="$emit('close')">
+          Портфолио
+        </router-link>
+        <router-link to="/services" class="mobile-menu__link" @click="$emit('close')">
+          Услуги
+        </router-link>
+        <router-link to="/contact" class="mobile-menu__link" @click="$emit('close')">
+          Контакты
+        </router-link>
+      </nav>
 
-        <div class="mobile-menu__actions">
-          <template v-if="isAuthenticated">
-            <router-link 
-              to="/profile" 
-              class="mobile-menu__link"
-              @click="$emit('close')"
-            >
-              <i class="fas fa-user"></i>
-              {{ currentUser.username }}
-            </router-link>
-            <button 
-              @click="handleLogout" 
-              class="mobile-menu__btn mobile-menu__btn--logout"
-            >
-              <i class="fas fa-sign-out-alt"></i>
-              Выйти
-            </button>
-          </template>
-          <template v-else>
-            <button 
-              @click="showAuthModal('login')" 
-              class="mobile-menu__btn mobile-menu__btn--login"
-            >
-              Войти
-            </button>
-            <button 
-              @click="showAuthModal('register')" 
-              class="mobile-menu__btn mobile-menu__btn--register"
-            >
-              Регистрация
-            </button>
-          </template>
+      <div class="mobile-menu__footer">
+        <div class="mobile-menu__auth">
+          <button @click="$emit('show-auth-modal', 'login')" class="btn btn-outline">
+            Войти
+          </button>
+          <button @click="$emit('show-auth-modal', 'register')" class="btn btn-primary">
+            Регистрация
+          </button>
         </div>
       </div>
     </div>
@@ -60,46 +44,12 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-
 export default {
   name: 'MobileMenu',
   props: {
     isOpen: {
       type: Boolean,
-      required: true
-    }
-  },
-  data() {
-    return {
-      navLinks: [
-        { name: 'Главная', path: '/' },
-        { name: 'Портфолио', path: '/portfolio' },
-        { name: 'Услуги', path: '/services' },
-        { name: 'Контакты', path: '/contact' }
-      ]
-    }
-  },
-  computed: {
-    ...mapState({
-      isAuthenticated: state => state.isAuthenticated,
-      currentUser: state => state.currentUser
-    })
-  },
-  methods: {
-    ...mapActions(['logout']),
-    showAuthModal(mode) {
-      this.$emit('show-auth-modal', mode)
-      this.$emit('close')
-    },
-    async handleLogout() {
-      try {
-        await this.logout()
-        this.$router.push('/')
-        this.$emit('close')
-      } catch (error) {
-        console.error('Error during logout:', error)
-      }
+      default: false
     }
   }
 }
@@ -109,48 +59,58 @@ export default {
 .mobile-menu {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  right: -100%;
+  width: 85%;
+  max-width: 300px;
+  height: 100vh;
+  background: var(--bg-secondary);
   z-index: 1000;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0.3s ease, opacity 0.3s ease;
+  transition: var(--trans-03);
 }
 
-.mobile-menu.active {
-  visibility: visible;
-  opacity: 1;
+.mobile-menu.is-open {
+  right: 0;
 }
 
 .mobile-menu__overlay {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--trans-03);
+  z-index: -1;
+}
+
+.mobile-menu.is-open .mobile-menu__overlay {
+  opacity: 1;
+  visibility: visible;
 }
 
 .mobile-menu__content {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 80%;
-  max-width: 300px;
-  background: var(--bg-color);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-}
-
-.mobile-menu.active .mobile-menu__content {
-  transform: translateX(0);
 }
 
 .mobile-menu__header {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mobile-menu__logo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
 }
 
 .mobile-menu__close {
@@ -160,78 +120,64 @@ export default {
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0.5rem;
-  transition: color 0.3s ease;
-}
-
-.mobile-menu__close:hover {
-  color: var(--primary-color);
 }
 
 .mobile-menu__nav {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 2rem;
+  padding: 1rem 0;
 }
 
 .mobile-menu__link {
   color: var(--text-color);
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
   padding: 0.5rem 0;
-  transition: color 0.3s ease;
+  transition: var(--trans-03);
 }
 
-.mobile-menu__link:hover,
-.mobile-menu__link.router-link-active {
+.mobile-menu__link:hover {
   color: var(--primary-color);
 }
 
-.mobile-menu__actions {
+.mobile-menu__footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.mobile-menu__auth {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
-.mobile-menu__btn {
+.btn {
   width: 100%;
   padding: 0.8rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: var(--radius-md);
   font-weight: 500;
+  transition: var(--trans-03);
+  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
 
-.mobile-menu__btn--login {
-  background: transparent;
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-}
-
-.mobile-menu__btn--register {
-  background: var(--primary-color);
-  color: var(--bg-color);
-}
-
-.mobile-menu__btn--logout {
-  background: #ff4444;
+.btn-primary {
+  background: var(--gradient-orange);
   color: white;
 }
 
-.mobile-menu__btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px var(--shadow-color);
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
 }
 
-@media (min-width: 769px) {
+@media (max-width: 480px) {
   .mobile-menu {
-    display: none;
+    width: 100%;
+    max-width: none;
   }
 }
 </style> 
