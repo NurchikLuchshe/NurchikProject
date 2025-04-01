@@ -35,9 +35,6 @@ export default {
   },
   mounted() {
     this.audio = document.querySelector('audio')
-    // Устанавливаем тему при загрузке приложения
-    const theme = localStorage.getItem('theme') || 'light'
-    document.documentElement.setAttribute('data-theme', theme)
   },
   methods: {
     ...mapMutations(['toggleTheme']),

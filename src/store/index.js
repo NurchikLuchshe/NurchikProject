@@ -25,10 +25,13 @@ export default createStore({
     },
     toggleTheme(state) {
       state.darkTheme = !state.darkTheme
+      localStorage.setItem('darkTheme', state.darkTheme)
       if (state.darkTheme) {
         document.body.classList.add('dark-theme')
+        document.documentElement.setAttribute('data-theme', 'dark')
       } else {
         document.body.classList.remove('dark-theme')
+        document.documentElement.setAttribute('data-theme', 'light')
       }
     },
     initTheme(state) {
@@ -36,6 +39,10 @@ export default createStore({
       state.darkTheme = darkTheme
       if (darkTheme) {
         document.body.classList.add('dark-theme')
+        document.documentElement.setAttribute('data-theme', 'dark')
+      } else {
+        document.body.classList.remove('dark-theme')
+        document.documentElement.setAttribute('data-theme', 'light')
       }
     },
     initAuth(state) {
