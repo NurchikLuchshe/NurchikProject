@@ -11,7 +11,8 @@
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
     "format": "prettier --write src/",
-    "start": "node backend/index.js"
+    "start": "node backend/index.js",
+    "postinstall": "cd backend && npm install"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

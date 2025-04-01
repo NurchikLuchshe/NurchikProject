@@ -15,6 +15,11 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // API routes
 app.use('/api', require('./routes'));
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // Handle all other routes by serving the Vue.js app
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));

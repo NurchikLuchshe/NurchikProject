@@ -3,9 +3,13 @@ services:
     name: nurchik-project
     env: node
     buildCommand: npm install && npm run build
-    startCommand: cd backend && npm install && npm start
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3000 
+        value: 3000
+      - key: MONGODB_URI
+        sync: false
+    healthCheckPath: /api/health
+    autoDeploy: true 
