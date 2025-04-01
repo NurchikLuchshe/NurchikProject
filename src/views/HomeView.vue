@@ -440,17 +440,101 @@ select:hover,
 
 @media (max-width: 768px) {
   .page-nav {
-    right: 1rem;
+    display: none;
   }
 
-  .page-number {
-    width: 10px;
-    height: 10px;
+  .hero__content {
+    padding: 1.5rem;
+    gap: 3rem;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .page-number::before {
-    width: 20px;
-    height: 20px;
+  .hero__left {
+    flex-direction: column;
+    padding: 2rem;
+    gap: 3rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .hero__social {
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .hero__stats {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .hero__center {
+    padding: 2rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .hero__image {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 2rem;
+  }
+
+  .hero__title {
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .hero__subtitle {
+    font-size: 1.6rem;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .hero__buttons {
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero__right {
+    padding: 2rem;
+    gap: 3rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .hero__skills {
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .hero__quote {
+    text-align: center;
+  }
+
+  .container {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -1067,6 +1151,106 @@ section {
   .interest-tag {
     padding: 0.6rem 1.2rem;
   }
+
+  .about__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .about__left {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .about__right {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .interests-tags {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__content {
+    padding: 1rem;
+    gap: 2rem;
+  }
+
+  .hero__left {
+    padding: 1.5rem;
+  }
+
+  .hero__center {
+    padding: 1.5rem;
+  }
+
+  .hero__right {
+    padding: 1.5rem;
+  }
+
+  .container {
+    padding: 0.8rem;
+  }
+
+  .hero__title {
+    font-size: 2.2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.3rem;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero__content {
+    padding: 0.8rem;
+    gap: 1.5rem;
+  }
+
+  .hero__left {
+    padding: 1rem;
+  }
+
+  .hero__center {
+    padding: 1rem;
+  }
+
+  .hero__right {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 0.6rem;
+  }
+
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.2rem;
+  }
 }
 
 .hero__right {
@@ -1261,59 +1445,195 @@ section {
   .hero__content {
     padding: 1.5rem;
     gap: 3rem;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .hero__left {
     flex-direction: column;
     padding: 2rem;
     gap: 3rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
   }
 
   .hero__social {
     gap: 1.5rem;
+    justify-content: center;
   }
 
   .hero__stats {
     flex-direction: column;
     gap: 1.5rem;
+    align-items: center;
   }
 
   .hero__center {
     padding: 2rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
   }
 
   .hero__image {
     width: 180px;
     height: 180px;
-    margin-bottom: 2rem;
+    margin: 0 auto 2rem;
   }
 
   .hero__title {
     font-size: 2.8rem;
     margin-bottom: 1.5rem;
+    text-align: center;
   }
 
   .hero__subtitle {
     font-size: 1.6rem;
     margin-bottom: 3rem;
+    text-align: center;
   }
 
   .hero__buttons {
     gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .hero__right {
     padding: 2rem;
     gap: 3rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
   }
 
-  .skill-tag {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.8rem;
+  .hero__skills {
+    justify-content: center;
+    gap: 1rem;
   }
 
   .hero__quote {
+    text-align: center;
+  }
+
+  .container {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .about__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .about__left {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .about__right {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .interests-tags {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__content {
+    padding: 1rem;
+    gap: 2rem;
+  }
+
+  .hero__left {
     padding: 1.5rem;
+  }
+
+  .hero__center {
+    padding: 1.5rem;
+  }
+
+  .hero__right {
+    padding: 1.5rem;
+  }
+
+  .container {
+    padding: 0.8rem;
+  }
+
+  .hero__title {
+    font-size: 2.2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.3rem;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero__content {
+    padding: 0.8rem;
+    gap: 1.5rem;
+  }
+
+  .hero__left {
+    padding: 1rem;
+  }
+
+  .hero__center {
+    padding: 1rem;
+  }
+
+  .hero__right {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 0.6rem;
+  }
+
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.2rem;
   }
 }
 

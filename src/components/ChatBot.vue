@@ -174,26 +174,30 @@ export default {
 <style scoped>
 .chat-bot {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 1rem;
+  right: 1rem;
   z-index: 1000;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .chat-bot__toggle {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #00ff88;
+  background: var(--primary-color);
+  color: var(--bg-color);
   border: none;
-  color: #2d3436;
-  font-size: 1.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.5rem;
   box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
   transition: all 0.3s ease;
-  position: relative;
+  z-index: 1001;
 }
 
 .chat-bot__toggle:hover {
@@ -215,33 +219,35 @@ export default {
 }
 
 .chat-bot__window {
-  position: absolute;
+  position: fixed;
   bottom: 80px;
-  right: 0;
+  right: 1rem;
   width: 350px;
   height: 500px;
-  background: white;
+  background: var(--bg-color);
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
   transform: translateY(20px);
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
+  z-index: 1000;
 }
 
-.chat-bot--open .chat-bot__window {
+.chat-bot__window.active {
   transform: translateY(0);
   opacity: 1;
   visibility: visible;
 }
 
 .chat-bot__header {
-  padding: 1rem;
+  padding: 0.8rem;
   background: #00ff88;
   color: #2d3436;
-  border-radius: 20px 20px 0 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -254,12 +260,12 @@ export default {
 }
 
 .chat-bot__header-content i {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 .chat-bot__header h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -280,17 +286,18 @@ export default {
 
 .chat-bot__messages {
   flex: 1;
-  padding: 1rem;
+  padding: 0.8rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chat-bot__message {
   display: flex;
   gap: 0.5rem;
-  max-width: 80%;
+  max-width: 85%;
 }
 
 .chat-bot__message.user {
@@ -300,9 +307,10 @@ export default {
 
 .chat-bot__message-content {
   background: #f5f5f5;
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 0.9rem;
   border-radius: 15px;
   position: relative;
+  word-break: break-word;
 }
 
 .chat-bot__message.user .chat-bot__message-content {
@@ -311,39 +319,41 @@ export default {
 }
 
 .chat-bot__message-time {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   opacity: 0.7;
   display: block;
   margin-top: 0.3rem;
 }
 
 .chat-bot__message-avatar {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   background: #00ff88;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #2d3436;
+  flex-shrink: 0;
 }
 
 .chat-bot__quick-replies {
-  padding: 1rem;
+  padding: 0.8rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
   background: #f8f8f8;
 }
 
 .chat-bot__quick-reply {
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   background: white;
   border: 1px solid #00ff88;
   color: #00ff88;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.85rem;
 }
 
 .chat-bot__quick-reply:hover {
@@ -352,19 +362,21 @@ export default {
 }
 
 .chat-bot__input {
-  padding: 1rem;
+  padding: 0.8rem;
   border-top: 1px solid #f0f0f0;
   display: flex;
   gap: 0.5rem;
+  background: white;
 }
 
 .chat-bot__input input {
   flex: 1;
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 0.9rem;
   border: 1px solid #f0f0f0;
   border-radius: 20px;
   outline: none;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
 .chat-bot__input input:focus {
@@ -372,8 +384,8 @@ export default {
 }
 
 .chat-bot__send {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   background: #00ff88;
   border: none;
@@ -383,6 +395,7 @@ export default {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .chat-bot__send:hover {
@@ -396,18 +409,59 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .chat-bot__window {
-    width: 100%;
-    height: 100vh;
-    bottom: 0;
-    right: 0;
-    border-radius: 0;
+  .chat-bot {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
   }
 
   .chat-bot__toggle {
     width: 50px;
     height: 50px;
+    font-size: 1.3rem;
+    margin-left: auto;
+  }
+
+  .chat-bot__window {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 4rem);
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-bot {
+    bottom: 0.8rem;
+    right: 0.8rem;
+    left: 0.8rem;
+  }
+
+  .chat-bot__toggle {
+    width: 45px;
+    height: 45px;
     font-size: 1.2rem;
+  }
+
+  .chat-bot__window {
+    height: calc(100% - 3.5rem);
+  }
+}
+
+@media (max-width: 360px) {
+  .chat-bot {
+    bottom: 0.6rem;
+    right: 0.6rem;
+    left: 0.6rem;
+  }
+
+  .chat-bot__toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
   }
 }
 </style> 
