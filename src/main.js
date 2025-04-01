@@ -1,0 +1,14 @@
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import './assets/styles/main.css'
+
+const app = createApp(App)
+
+// Инициализация состояния приложения
+store.dispatch('init')
+
+app.use(store)
+app.use(router)
+app.mount('#app')
