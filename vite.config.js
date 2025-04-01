@@ -24,6 +24,16 @@ export default defineConfig({
         drop_console: true,
         drop_debugger: true
       }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', 'vue-router', 'vuex']
+        }
+      }
     }
+  },
+  server: {
+    port: process.env.PORT || 3000
   }
 })

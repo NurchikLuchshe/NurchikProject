@@ -10,7 +10,8 @@
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "start": "node backend/index.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -36,8 +37,7 @@
     "oxlint": "^0.15.13",
     "prettier": "3.5.3",
     "terser": "^5.27.2",
-    "vite": "^6.2.1",
-    "vite-plugin-vue-devtools": "^7.7.2"
+    "vite": "^6.2.1"
   },
   "description": "This template should help get you started developing with Vue 3 in Vite.",
   "main": "eslint.config.js",
