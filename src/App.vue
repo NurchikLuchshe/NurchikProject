@@ -1,22 +1,24 @@
 <script>
-import AppFooter from '@/components/Footer.vue'
 import SplashScreen from '@/components/SplashScreen.vue'
 import ParticlesBackground from '@/components/ParticlesBackground.vue'
 import CursorEffect from '@/components/CursorEffect.vue'
 import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
-import AuthModal from '@/components/AuthModal.vue'
-import authCheck from '@/mixins/authCheck'
 import MobileMenu from '@/components/MobileMenu.vue'
+import WelcomeModal from '@/components/WelcomeModal.vue'
+import ChatBot from '@/components/ChatBot.vue'
+import Footer from '@/components/Footer.vue'
+import authCheck from '@/mixins/authCheck'
 
 export default {
   name: 'App',
   components: {
-    AppFooter,
     SplashScreen,
     ParticlesBackground,
     CursorEffect,
-    AuthModal,
-    MobileMenu
+    MobileMenu,
+    WelcomeModal,
+    ChatBot,
+    Footer
   },
   mixins: [authCheck],
   data() {
@@ -26,7 +28,8 @@ export default {
       showModal: false,
       authMode: 'login',
       isUserMenuOpen: false,
-      isMobileMenuOpen: false
+      isMobileMenuOpen: false,
+      showWelcomeModal: false
     }
   },
   computed: {
@@ -35,6 +38,12 @@ export default {
   },
   mounted() {
     this.audio = document.querySelector('audio')
+    
+    // Проверяем, есть ли сохраненный пользователь
+    const savedUser = localStorage.getItem('user')
+    if (!savedUser) {
+      this.showWelcomeModal = true
+    }
   },
   methods: {
     ...mapMutations(['toggleTheme']),
@@ -55,9 +64,11 @@ export default {
     openAuthModal(mode) {
       this.authMode = mode
       this.showModal = true
+      this.showWelcomeModal = true
     },
     closeModal() {
       this.showModal = false
+      this.showWelcomeModal = false
     },
     toggleAuthMode() {
       this.authMode = this.authMode === 'login' ? 'register' : 'login'
@@ -85,14 +96,16 @@ export default {
     },
     async handleAuthSuccess() {
       this.closeModal()
+      this.showWelcomeModal = false
+      
+      // Обновляем состояние приложения
+      await this.$store.dispatch('init')
+      
       this.$notify({
         title: 'Успех',
-        message: this.authMode === 'login' ? 'Вы успешно вошли в систему' : 'Регистрация успешно завершена',
-        type: 'success',
-        duration: 3000
+        text: 'Вы успешно вошли в систему',
+        type: 'success'
       })
-      await this.$router.push('/')
-      await this.$store.dispatch('init')
     },
     toggleUserMenu() {
       if (!this.checkAuth()) return
@@ -102,6 +115,7 @@ export default {
       await this.logout()
       this.isUserMenuOpen = false
       this.$router.push('/')
+      this.showWelcomeModal = true
       this.$notify({
         title: 'Выход',
         message: 'Вы успешно вышли из системы',
@@ -145,12 +159,7 @@ export default {
           <!-- Действия справа -->
           <div class="navbar__actions">
             <div v-if="!isAuthenticated" class="auth-buttons">
-              <button @click="openAuthModal('login')" class="btn btn-outline">
-                Войти
-              </button>
-              <button @click="openAuthModal('register')" class="btn btn-primary">
-                Регистрация
-              </button>
+              <!-- Кнопки входа и регистрации удалены -->
             </div>
 
             <div v-else class="user-menu">
@@ -197,12 +206,9 @@ export default {
         </transition>
       </router-view>
     </main>
-    <AppFooter />
-    <AuthModal 
-      v-if="showModal"
-      :mode="authMode"
-      @close="closeModal"
-      @toggle-mode="toggleAuthMode"
+    <Footer />
+    <WelcomeModal 
+      v-if="showWelcomeModal"
       @success="handleAuthSuccess"
     />
   </div>

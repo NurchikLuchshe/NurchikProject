@@ -1,13 +1,13 @@
 // Регулярное выражение для проверки email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-// Проверка существования email через API
+// Проверка существования email через localStorage
 export const checkEmailExists = async (email) => {
   try {
-    // Получаем список пользователей из db.json
-    const response = await fetch('/db.json')
-    const data = await response.json()
-    return data.users.some(user => user.email === email)
+    // Получаем список пользователей из localStorage
+    const users = localStorage.getItem('users')
+    const usersList = users ? JSON.parse(users) : []
+    return usersList.some(user => user.email === email)
   } catch (error) {
     console.error('Error checking email:', error)
     return false

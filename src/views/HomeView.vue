@@ -714,6 +714,17 @@ section {
   z-index: 1;
 }
 
+.hero__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.hero__image:hover img {
+  transform: scale(1.1);
+}
+
 .hero__title {
   font-size: 4.5rem;
   background: linear-gradient(45deg, var(--text-color), var(--primary-color));

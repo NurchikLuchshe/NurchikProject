@@ -108,22 +108,45 @@ export default {
     async updateProfile() {
       this.loading = true
       try {
-        // Обновляем данные пользователя в store
-        const updatedUser = {
-          username: this.form.username,
-          email: this.form.email
-        }
-        this.$store.commit('setUser', updatedUser)
+        // Получаем текущих пользователей
+        const users = await this.$store.dispatch('getUsers')
         
-        // Если есть новый пароль, обновляем его
-        if (this.form.newPassword) {
-          // Здесь должна быть логика обновления пароля
-          this.form.newPassword = '' // Очищаем поле пароля после обновления
-        }
+        // Находим текущего пользователя
+        const currentUser = users.find(u => u.email === this.currentUser.email)
         
-        alert('Профиль успешно обновлен!')
+        if (currentUser) {
+          // Обновляем данные пользователя
+          currentUser.username = this.form.username
+          currentUser.email = this.form.email
+          
+          // Если есть новый пароль, обновляем его
+          if (this.form.newPassword) {
+            currentUser.password = this.$store.dispatch('hashPassword', this.form.newPassword)
+            this.form.newPassword = '' // Очищаем поле пароля
+          }
+          
+          // Сохраняем обновленных пользователей
+          await this.$store.dispatch('saveUsers', users)
+          
+          // Обновляем данные в store
+          this.$store.commit('setUser', {
+            id: currentUser.id,
+            username: currentUser.username,
+            email: currentUser.email
+          })
+          
+          // Обновляем данные в localStorage
+          localStorage.setItem('user', JSON.stringify({
+            id: currentUser.id,
+            username: currentUser.username,
+            email: currentUser.email
+          }))
+          
+          this.$toast.success('Профиль успешно обновлен!')
+        }
       } catch (error) {
-        alert('Произошла ошибка при обновлении профиля')
+        console.error('Error updating profile:', error)
+        this.$toast.error('Произошла ошибка при обновлении профиля')
       } finally {
         this.loading = false
       }

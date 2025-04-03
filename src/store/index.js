@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import { validateCredentials, verifyPassword, hashPassword } from '@/utils/auth'
-import { getUsers, addUser, checkEmailExists } from '@/utils/db'
+import { getUsers, addUser, checkEmailExists, saveUsers } from '@/utils/db'
 
 export default createStore({
   state: {
@@ -62,15 +62,36 @@ export default createStore({
     }
   },
   actions: {
-    async fetchUsers({ commit }) {
+    async getUsers({ commit }) {
       const users = await getUsers()
       commit('setUsers', users)
       return users
     },
+    async saveUsers({ commit }, users) {
+      const success = await saveUsers(users)
+      if (success) {
+        commit('setUsers', users)
+      }
+      return success
+    },
+    hashPassword(_, password) {
+      return hashPassword(password)
+    },
     async login({ commit, state, dispatch }, credentials) {
       try {
+        // Извлекаем данные из FormData, если это FormData
+        let email, password;
+        
+        if (credentials instanceof FormData) {
+          email = credentials.get('email');
+          password = credentials.get('password');
+        } else {
+          email = credentials.email;
+          password = credentials.password;
+        }
+        
         // Валидация учетных данных
-        const validation = validateCredentials(credentials.email, credentials.password)
+        const validation = validateCredentials(email, password)
         if (!validation.isValid) {
           throw new Error(validation.errors.join(', '))
         }
@@ -79,14 +100,14 @@ export default createStore({
         const users = await getUsers()
         
         // Ищем пользователя по email
-        const user = users.find(u => u.email === credentials.email)
+        const user = users.find(u => u.email === email)
         
         if (!user) {
           throw new Error('Пользователь с таким email не найден')
         }
 
         // Проверяем пароль
-        if (!verifyPassword(credentials.password, user.password)) {
+        if (!verifyPassword(password, user.password)) {
           throw new Error('Неверный пароль')
         }
 
@@ -110,14 +131,29 @@ export default createStore({
     },
     async register({ commit, state, dispatch }, credentials) {
       try {
+        // Извлекаем данные из FormData, если это FormData
+        let username, email, password, avatar;
+        
+        if (credentials instanceof FormData) {
+          username = credentials.get('username');
+          email = credentials.get('email');
+          password = credentials.get('password');
+          avatar = credentials.get('avatar');
+        } else {
+          username = credentials.username;
+          email = credentials.email;
+          password = credentials.password;
+          avatar = credentials.avatar;
+        }
+        
         // Валидация учетных данных
-        const validation = validateCredentials(credentials.email, credentials.password)
+        const validation = validateCredentials(email, password)
         if (!validation.isValid) {
           throw new Error(validation.errors.join(', '))
         }
 
         // Проверяем, существует ли пользователь
-        const exists = await checkEmailExists(credentials.email)
+        const exists = await checkEmailExists(email)
         if (exists) {
           throw new Error('Пользователь с таким email уже существует')
         }
@@ -125,9 +161,9 @@ export default createStore({
         // Создаем нового пользователя с хешированным паролем
         const newUser = {
           id: Date.now(),
-          username: credentials.username,
-          email: credentials.email,
-          password: hashPassword(credentials.password)
+          username: username,
+          email: email,
+          password: hashPassword(password)
         }
 
         // Добавляем пользователя в базу данных
@@ -139,8 +175,8 @@ export default createStore({
         // Создаем объект пользователя без пароля
         const userData = {
           id: newUser.id,
-          username: credentials.username,
-          email: credentials.email
+          username: username,
+          email: email
         }
 
         // Сохраняем состояние
@@ -148,6 +184,14 @@ export default createStore({
         commit('setUser', userData)
         localStorage.setItem('isAuthenticated', 'true')
         localStorage.setItem('user', JSON.stringify(userData))
+        
+        // Если есть аватар, сохраняем его
+        if (avatar) {
+          // В реальном проекте здесь должна быть загрузка файла на сервер
+          // Для демонстрации используем URL.createObjectURL
+          const avatarUrl = URL.createObjectURL(avatar)
+          commit('setUserAvatar', avatarUrl)
+        }
         
         return userData
       } catch (error) {
@@ -166,7 +210,7 @@ export default createStore({
       })
     },
     async init({ commit, dispatch }) {
-      await dispatch('fetchUsers')
+      await dispatch('getUsers')
       commit('initAuth')
       commit('initTheme')
     },
